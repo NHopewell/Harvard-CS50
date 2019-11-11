@@ -40,17 +40,21 @@ int main(void)
     total += sum_every_other + sum_rest;
     
     if (total % 10 == 0){
-        if (cc_number_length == 15 && ( return_first_n_digits(cc_number, 2) ==34 
-                                      || return_first_n_digits(cc_number, 2) ==37)){
+
+        int first_didgit = return_first_n_digits(cc_number, 1);
+        int first_two_digits = return_first_n_digits(cc_number, 2);
+
+        if (cc_number_length == 15 && ( first_two_digits == 34 
+                                      || first_two_digits ==37 )){
             printf("AMEX\n");
-        } else if (cc_number_length == 16 && ( return_first_n_digits(cc_number, 2) == 51  
-                                          || return_first_n_digits(cc_number, 2) == 52
-                                          || return_first_n_digits(cc_number, 2) == 53
-                                          || return_first_n_digits(cc_number, 2) == 54
-                                          || return_first_n_digits(cc_number, 2) == 55)){
+        } else if (cc_number_length == 16 && ( first_two_digits == 51  
+                                          || first_two_digits == 52
+                                          || first_two_digits == 53
+                                          || first_two_digits == 54
+                                          || first_two_digits == 55)){
                 printf("MASTERCARD\n");
         } else if ((cc_number_length == 16 || cc_number_length == 16) && 
-                   return_first_n_digits(cc_number, 1) == 4) {
+                   first_didgit  == 4) {
             printf("VISA\n");
         } else {
             printf("INVALID\n");
@@ -58,7 +62,6 @@ int main(void)
     } else{
             printf("INVALID\n");
     }
-
 }
 
 int get_long_length(long number){
