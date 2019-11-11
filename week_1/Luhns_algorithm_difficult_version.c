@@ -41,7 +41,7 @@ int main(void)
     
     if (total % 10 == 0){
 
-        int first_didgit = return_first_n_digits(cc_number, 1);
+        int first_digit = return_first_n_digits(cc_number, 1);
         int first_two_digits = return_first_n_digits(cc_number, 2);
 
         if (cc_number_length == 15 && ( first_two_digits == 34 
@@ -54,7 +54,7 @@ int main(void)
                                           || first_two_digits == 55)){
                 printf("MASTERCARD\n");
         } else if ((cc_number_length == 16 || cc_number_length == 16) && 
-                   first_didgit  == 4) {
+                   first_digit  == 4) {
             printf("VISA\n");
         } else {
             printf("INVALID\n");
