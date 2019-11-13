@@ -6,10 +6,11 @@ int return_first_n_digits(long, int);
 
 int main(void)
 {
+    // prompt for user cc number and store len
     long cc_number = get_long("Enter credit card number: ");
     int cc_number_length = get_long_length(cc_number);
     
-     // convert cc input to string
+    // convert cc input to string
     char buffer [20];
     snprintf(buffer, 20, "%lu", cc_number);
     
@@ -18,6 +19,9 @@ int main(void)
     int sum_rest = 0;
     int total = 0;
     
+    // convert every other char in array to int
+    // multiply by 2
+    // repeat if return val > 9
     for (int i = 0; i < cc_number_length; i +=2 ){
         int x = buffer[i] - '0';
         x *= 2;
@@ -32,34 +36,38 @@ int main(void)
                 sum_every_other += x;
         }
     }
+    // from end of array to start, convert to int, sum
     for (int i = cc_number_length-1; i > 0; i-=2){
         int z = buffer[i] - '0';
         sum_rest += z;
     }
-    
+    // sum every odd digit which has been multipled by 
+    // 2 with the even digits
     total += sum_every_other + sum_rest;
-    
+    // check is sum ends in 0
     if (total % 10 == 0){
-
+        // get first and first&second digits for checking
         int first_digit = return_first_n_digits(cc_number, 1);
         int first_two_digits = return_first_n_digits(cc_number, 2);
 
+        // check terms for each typeof credit card to be valid
         if (cc_number_length == 15 && ( first_two_digits == 34 
                                       || first_two_digits ==37 )){
             printf("AMEX\n");
-        } else if (cc_number_length == 16 && ( first_two_digits == 51  
-                                          || first_two_digits == 52
-                                          || first_two_digits == 53
-                                          || first_two_digits == 54
-                                          || first_two_digits == 55)){
-                printf("MASTERCARD\n");
-        } else if ((cc_number_length == 16 || cc_number_length == 16) && 
+        } else if (
+            cc_number_length == 16 && (
+                first_two_digits == 51 || first_two_digits == 52 ||
+                first_two_digits == 53 || first_two_digits == 54 ||
+                first_two_digits == 55)
+                  ){ printf("MASTERCARD\n");
+        } else if (
+            (cc_number_length == 16 || cc_number_length == 16) && 
                    first_digit  == 4) {
             printf("VISA\n");
         } else {
             printf("INVALID\n");
         }
-    } else{
+    } else{  // base case
             printf("INVALID\n");
     }
 }
