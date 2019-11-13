@@ -18,11 +18,12 @@
 int main(void)
 {
 	int pyramid_height;
+	char *user_input = "How tall should the pyramid be? "
+			   "(pick a number less than 9)\n";
 
 	do {    // prompt user for height 
 		pyramid_height = get_int(
-			"How tall should the pyramid be? \
-			(pick a number less than 9)\n");
+			user_input");
 	} while (pyramid_height < 1 || pyramid_height > 8);
 
 	int count = 1;
