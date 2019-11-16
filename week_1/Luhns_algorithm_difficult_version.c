@@ -1,8 +1,9 @@
-// My implementation of Luhns algorithm to check
-// the type and validity of a credit card number. 
-// User enters a cc number, it must be parsed to
-// be ensure it is valid and determine which
-// type of card it is (Visa, AMEX, Mastercard).
+/* My implementation of Luhns algorithm to check
+ * the type and validity of a credit card number. 
+ * User enters a cc number, it must be parsed to
+ * be ensure it is valid and determine which
+ * type of card it is (Visa, AMEX, Mastercard).
+ */
 
 #include <stdio.h>
 #include <cs50.h>
@@ -99,5 +100,3 @@ int return_first_n_digits(long number, int n_digits)
     }
     return number;
 }
-
-
