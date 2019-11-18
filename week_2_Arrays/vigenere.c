@@ -94,6 +94,11 @@ int main(int argc, string argv[])
 
 int shift(char c)
 {
+    // Map each letter of the alphabet
+    // to an enumerated val 0 through 25.
+    // Used for mapping values for shifting
+    // input messages into ciphered text.
+    
     // arent supposed to use something like
     // a hash map to do this. Have to do it
     // the long way.
