@@ -1,3 +1,18 @@
+/*
+ * Vigenère’s cipher improves upon Caesar’s cipher 
+ * by encrypting messages using a sequence of keys 
+ * (or, put another way, a keyword).
+ * In other words, if p is some plaintext and k is a 
+ * keyword (i.e., an alphabetical string, whereby A 
+ * (or a) represents 0, B (or b) represents 1, C (or c) 
+ * represents 2, …, and Z (or z) represents 25).
+ * 
+ *     Example:
+ *     $ ./vigenere bacon
+ *     plaintext:  Meet me at the park at eleven am
+ *     ciphertext: Negh zf av huf pcfx bt gzrwep oz
+ */
+
 #include <cs50.h>
 #include <stdio.h>
 #include <string.h>
