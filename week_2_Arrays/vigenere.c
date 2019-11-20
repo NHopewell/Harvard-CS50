@@ -1,3 +1,18 @@
+/*
+ * Vigenère’s cipher improves upon Caesar’s cipher 
+ * by encrypting messages using a sequence of keys 
+ * (or, put another way, a keyword).
+ * In other words, if p is some plaintext and k is a 
+ * keyword (i.e., an alphabetical string, whereby A 
+ * (or a) represents 0, B (or b) represents 1, C (or c) 
+ * represents 2, …, and Z (or z) represents 25).
+ * 
+ *     Example:
+ *     $ ./vigenere bacon
+ *     plaintext:  Meet me at the park at eleven am
+ *     ciphertext: Negh zf av huf pcfx bt gzrwep oz
+ */
+
 #include <cs50.h>
 #include <stdio.h>
 #include <string.h>
@@ -79,6 +94,11 @@ int main(int argc, string argv[])
 
 int shift(char c)
 {
+    // Map each letter of the alphabet
+    // to an enumerated val 0 through 25.
+    // Used for mapping values for shifting
+    // input messages into ciphered text.
+    
     // arent supposed to use something like
     // a hash map to do this. Have to do it
     // the long way.
