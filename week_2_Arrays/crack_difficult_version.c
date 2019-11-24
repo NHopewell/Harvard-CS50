@@ -1,3 +1,30 @@
+/* crack.c tries to crack a hased password. 
+
+Specifications
+1. Your program should accept one and only one 
+    command-line argument: a hashed password.
+2. If your program is executed without any command-line
+   arguments or with more than one command-line argument, 
+   your program should print an error (of your choice) and 
+   exit immediately, with main returning 1 (thereby signifying
+   an error).
+3. Otherwise, your program must proceed to crack the given 
+   password, ideally as quickly as possible, ultimately printing 
+   the password in the clear followed by \n, nothing more, nothing 
+   less, with main returning 0.
+4. Assume that each password has been hashed with C’s DES-based 
+   (not MD5-based) crypt function.
+5. Assume that each password is no longer than five (5)
+   characters. Gasp!
+6. Assume that each password is composed entirely of alphabetical 
+   characters (uppercase and/or lowercase).
+
+Example: 
+$ ./crack 50cI2vYkF0YU2
+LOL
+
+*/
+
 #include <cs50.h>
 #include <stdio.h>
 #include <crypt.h>
