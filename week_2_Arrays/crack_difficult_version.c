@@ -54,14 +54,15 @@ int main(int argc, string argv[])
         for (int l = 0; l < NUM_LETTERS; l++){
             for (int k = 0; k < NUM_LETTERS; k++){
                 for (int j = 0; j < NUM_LETTERS; j++){
-                    for (int i = 1; i < NUM_LETTERS; i++){
+                    for (int i = 1; i < NUM_LETTERS; i++){ // start at a not null
                         // first pass through all_letters, other positions held null
                         to_check[0] = all_letters[i];  
                         to_check[1] = all_letters[j]; 
                         to_check[2] = all_letters[k];  
                         to_check[3] = all_letters[l]; 
                         to_check[4] = all_letters[m]; 
-                        if (strcmp(crypt(to_check, salt), argv[1]) == 0){
+                        if (strcmp(crypt(to_check, salt), argv[1]) == 0)
+                        {
                             printf("%s\n", to_check);
                             return 0;
                         }
