@@ -23,16 +23,17 @@ int main(int argc, char *argv[])
 
 int collatz(int num, int steps) 
 {
+    // base case
     if (num == 1)
         return steps;
+    // even recursion case
     else if (num%2 == 0){
         steps += 1;
-        num = num/2;
-        return collatz(num, steps);
+        return collatz(num/2, steps);
+    // odd recusion case
     }
     else {
         steps += 1;
-        num = 3*num+1;
-        return collatz(num, steps);
+        return collatz(3*num+1, steps);
     }
 }
