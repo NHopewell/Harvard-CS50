@@ -61,5 +61,5 @@ The position (in numbert of bytes from start of file) to position the pointer.
 
 ## What is `SEEK_CUR`?
 
-SEEK_CUR is the current position of the pointer.
+SEEK_CUR is the current position of the pointer in the file.
 
