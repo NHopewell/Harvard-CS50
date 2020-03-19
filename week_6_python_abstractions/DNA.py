@@ -8,6 +8,7 @@ database_data = csv.DictReader(open(database))
 sequence = sys.argv[2]
 f = open(sequence, "r")
 sequence_data = f.read()
+f.close()
 
 # Short Tandem Repeats in DNA sequences
 STR = ('AGATC','AATG','TATC')
