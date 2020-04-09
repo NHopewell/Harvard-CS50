@@ -1,0 +1,23 @@
+body
+{
+    text-align: center;
+}
+.m
+{
+    text-align: left;
+}
+.b-r
+{
+    border-radius: 4px;
+    background-color: cornflowerblue;
+}
+.g-r
+{
+    border-radius: 4px;
+    background-color: darkcyan;
+}
+.r-r
+{
+    border-radius: 4px;
+    background-color: orangered;
+}

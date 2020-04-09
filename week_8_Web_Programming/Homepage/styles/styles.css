@@ -1,0 +1,168 @@
+/* Body */
+body{
+    font-family: "Montserrat";
+    text-align: center
+}
+
+/* Main Sections */
+.coloured-section {
+    background-color: #ff4c68;
+    color: #fff;    
+}
+
+.white-section {
+    background-color: #fff;
+}
+/* Containers */
+.container-fluid {
+    padding: 7% 15%;
+}
+
+#title .container-fluid{
+    padding: 3% 15% 7%;
+    text-align: left;
+}
+
+#footer .container-fluid{
+    padding: 4% 15%;
+}
+
+/* Headings */
+.title-heading, .price-heading, .testimonial-heading, .cta-heading{
+    font-size: 3rem;
+    line-height: 1.5;
+}
+
+.features-heading, .price-heading-3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+/* --------------------------------------------- */
+
+/* -------------   TITLE SECTION   ------------- */
+/* Navigation Bar */
+.navbar {
+    padding: 0 0 4.5rem;
+}
+
+.navbar-brand{
+    font-family: Ubuntu;
+    font-size: 2.25rem;
+}
+
+.nav-item{
+    padding: 0 18px;
+}
+
+.nav-link{
+    font-size: 1.2rem;
+    font-weight: 200;
+}
+
+/* Download Buttons */
+.download-button{
+    margin: 5% 3% 5% 0;
+}
+
+.title-heading{
+    font-weight: 800;
+}
+
+/* Title image */
+.title-image{
+    transform: rotate(25deg);
+    width: 60%;
+    position: absolute;
+    right: 30%;
+}
+
+/* tablet and mobile size responses  */
+@media (max-width: 1028px){
+    #title{
+        text-align: center;
+    }
+    .title-image {
+        position: static;
+        transform: rotate(0);
+    }
+}
+/* ------------------------------------------------- */
+
+/* -------------   FEATURES SECTION    ------------- */
+#features{
+    position: relative;  
+}
+
+.features-p{
+    color: #8f8f8f;
+    padding: 0 20%;
+}
+
+.features-image{
+    margin-bottom: 1rem;
+    color: #ef8172;
+}
+
+.features-image:hover{
+    color: #ff4c68;
+}
+/* ----------------------------------------------------- */
+
+/* -------------   TESTIMONIALS SECTION    -------------*/
+#testimonials {
+    background-color: #ef8172;
+}
+
+.testimonial-heading{
+    font-weight: 600;
+}
+
+.testimonial-img {
+    width: 10%;
+    border-radius: 100%;
+    margin: 20px;
+}
+
+#press {
+    background-color: #ef8172;
+    padding-bottom: 3%;
+}
+
+.press-image{
+    width: 13%;
+    margin: 20px 20px 50px;
+}
+/* ------------------------------------------------ */
+
+/* -------------   PRICING SECTION    ------------- */
+.pricing-text {
+    font-size: 1.2rem;
+}
+
+.pricing-col {
+    padding: 3% 2%;
+}
+/* -------------------------------------------------------*/
+
+/* -------------   CALL TO ACTION SECTION   ------------- */
+.cta-heading{
+    font-weight: 800;
+}
+/* ---------------------------------------------------- */
+
+/* -------------   FOOTER MEDIA SECTION   ------------- */
+
+.footer-p {
+    color: lightgray;
+}
+
+.s-media {
+    margin:2% 0;
+    background-color: #fff;
+    border-color: #fff;
+}
+
+.s-media:hover {
+    background-color: #fff;
+    border-color: #fff;
+}
