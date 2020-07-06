@@ -2,13 +2,12 @@
 
 {% block body %}
     <h1>Tasks to do</h1>
-
     <ul>
-        <li>Item one</li>
-        <li>Item two</li>
-        <li>Item three</li>
+        {% for task in todos %}
+            <li>{{ task }}</li>
+        {% endfor %}
     </ul>
 
-    <a href="/new">Create a new task</a>
+    <a href="/add">Create a new task</a>
 
 {% endblock %}
