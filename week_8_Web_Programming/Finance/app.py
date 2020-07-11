@@ -115,14 +115,19 @@ def logout():
 def quote():
     """Get stock quote."""
     if request.method == 'POST':
-        # lookup the entered stock using the lookup helper function and dislay the results
-        # if lookup returns none, it means the user typed in the wrong stock name, display something to handle this
-        pass
-    else:
-        # display form to register form to request stock quote
-        pass
+        # Ensure stock was submitted
+        if not request.form.get("stockSymbol"):
+            return apology("must provide a stock symbol to look up", 403)
 
-    #return apology("TODO")
+        stock = lookup(request.form.get("stockSymbol"))
+
+        if not stock:
+            return render_template("quoted.html")
+
+        return render_template("quoted.html", stock_name=stock["name"],
+                        stock_symbol=stock["symbol"], stock_value=stock["price"])
+    else:
+        return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
