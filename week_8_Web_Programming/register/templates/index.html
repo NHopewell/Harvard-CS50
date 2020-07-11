@@ -10,7 +10,7 @@
 
     <ul>
         {% for row in rows %}
-            <li> {{ row.name }} ( {{ row.email }} )</li>
+            <li> {{ row['name']}} ( {{ row['email'] }} )</li>
         {% endfor %}
     </ul>
     
