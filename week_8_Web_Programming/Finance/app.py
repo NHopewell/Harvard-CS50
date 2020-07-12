@@ -203,9 +203,10 @@ def buy():
 
         rows = db.execute("SELECT * FROM purchases WHERE user_id = :user_id", user_id=session["user_id"])
 
-        total_spent = 0
-        for row in rows:
-            total_spent += row["total_cost"]
+        total_spent = db.execute("SELECT SUM(total_cost) FROM purchases GROUP BY user_id HAVING user_id = :id", id=session["user_id"])
+
+        total_spent = total_spent[0]['SUM(total_cost)']
+
         all_funds = remainder + total_spent
 
 
