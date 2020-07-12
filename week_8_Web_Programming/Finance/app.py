@@ -44,9 +44,9 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    # no post, just query data in db for user, and show all their stocks, num shares, and value of shares (share price x num shares), as well as total value
-    # lookup() to find current value of stocks
-    # in buy step, you made a table for the currently logged in user, use their session['user_id']
+
+
+
 
     # also give user the option to ADD cash.
 
@@ -194,12 +194,23 @@ def buy():
         if user_total_cash < total_cost:
             return apology("You do not have enough funds", 403)
 
-        db.execute("INSERT INTO purchases (user_id, stock_symbol, stock_value, num_shares) VALUES (:user, :symbol, :value, :shares);",
-                user=session["user_id"], symbol=symbol, value=stock["price"], shares=quantity)
+        db.execute("INSERT INTO purchases (user_id, stock_symbol, stock_value, num_shares, total_cost) VALUES (:user, :symbol, :value, :shares, :total);",
+                user=session["user_id"], symbol=symbol, value=stock["price"], shares=quantity, total=total_cost)
 
-        return render_template("index.html")
+        remainder = user_total_cash - total_cost
+
+        db.execute("UPDATE users SET cash = :remainder WHERE id = :id", remainder=remainder, id=session["user_id"])
+
+        rows = db.execute("SELECT * FROM purchases WHERE user_id = :user_id", user_id=session["user_id"])
+
+        total_spent = 0
+        for row in rows:
+            total_spent += row["total_cost"]
+        all_funds = remainder + total_spent
+
+
+        return render_template("index.html", rows=rows, cash=usd(remainder), all_funds=usd(all_funds))
     else:
-
         return render_template("buy.html")
 
 
