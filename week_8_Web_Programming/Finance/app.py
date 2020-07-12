@@ -170,11 +170,37 @@ def buy():
     if request.method == 'POST':
         # query db to mske sure the user can afford the stock (check cash and compare to price of stock (using lookup() x number of stock) the purchase the stock for user)
         # will have to add more tables to the db to store users stocks (stock bought, how many shares bought, who bought the stock)
-        pass
+
+        # Ensure user input a stock symbol
+        symbol = request.form.get("symbol")
+        if not symbol:
+            return apology("Must provide a stock symbol", 403)
+
+        quantity = int(request.form.get("shares"))
+        if not quantity:
+            return apology("Must provide a quantity to buy", 403)
+        elif quantity <= 0:
+            return apology("Must provide a positive number of stocks to buy", 403)
+
+        stock = lookup(symbol)
+        if not stock:
+            return apology("Stock symbol entered is not valid", 403)
+
+        total_cost = stock["price"] * quantity
+
+        rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
+        user_total_cash = rows[0]["cash"]
+
+        if user_total_cash < total_cost:
+            return apology("You do not have enough funds", 403)
+
+        db.execute("INSERT INTO purchases (user_id, stock_symbol, stock_value, num_shares) VALUES (:user, :symbol, :value, :shares);",
+                user=session["user_id"], symbol=symbol, value=stock["price"], shares=quantity)
+
+        return render_template("index.html")
     else:
-        # display form to register for account - looks like login.html but with password confirmation field
-        pass
-    #return apology("TODO")
+
+        return render_template("buy.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
