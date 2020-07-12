@@ -210,7 +210,7 @@ def buy():
         all_funds = remainder + total_spent
 
 
-        return render_template("index.html", rows=rows, cash=usd(remainder), all_funds=usd(all_funds))
+        return render_template("history.html", rows=rows, cash=usd(remainder), all_funds=usd(all_funds))
     else:
         return render_template("buy.html")
 
