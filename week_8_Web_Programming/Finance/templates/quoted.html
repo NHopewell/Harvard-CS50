@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+{% if stock_name %}
+    <p>A share of {{stock_name}} {{stock_symbol}} costs ${{stock_value}}</p>
+{% else %}
+    <p>No stock matches symbol entered. Please enter a valid stock symbol.</p>
+{% endif %}
+{% endblock %}
