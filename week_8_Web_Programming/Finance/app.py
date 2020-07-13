@@ -46,7 +46,6 @@ def index():
     """Show portfolio of stocks"""
 
     rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
-    user_total_cash = rows[0]["cash"]
 
     stock_counts = db.execute("SELECT user_id, stock_symbol, SUM(num_shares) FROM purchases GROUP BY user_id, stock_symbol HAVING user_id = :id;", id=session["user_id"])
 
@@ -56,9 +55,12 @@ def index():
         row["Current Price"] = current_price
         row["TOTAL"] = total_value
 
-    total = sum(row["TOTAL"] for row in stock_counts)
+    total_purchased = sum(row["TOTAL"] for row in stock_counts)
+    cash_remaining = rows[0]["cash"]
 
-    return render_template("index.html", stock_counts=stock_counts, cash=usd(user_total_cash), total=usd(total))
+    user_total_cash = cash_remaining + total_purchased
+
+    return render_template("index.html", stock_counts=stock_counts, cash=usd(cash_remaining), total=usd(user_total_cash))
 
 @app.route("/history")
 @login_required
@@ -236,13 +238,25 @@ def sell():
         # sell specified num of stock, first check if they own that stock and own enough of it,
         # update the users total cash with the share price (lookup()) x num shares
         # update tables of the users stock once they have sold their stock
-        pass
-    else:
-        # display form of what stock they want to buy and how many shares
-        pass
 
-    #return apology("TODO")
-    #return apology("TODO")
+
+        # Ensure symbol was submitted
+        if not request.form.get("symbol"):
+            return apology("must select a stock to sell", 403)
+        else:
+            print(request.form.get("symbol"))
+
+
+         # Ensure number of shares was submitted
+        if not request.form.get("shares"):
+            return apology("must provide the number of shares to sell", 403)
+
+
+    else:
+        unique_stocks = [item["stock_symbol"] for item in db.execute("SELECT DISTINCT stock_symbol FROM purchases WHERE user_id = :id", id=session["user_id"])]
+
+        return render_template("sell.html", unique_stocks=unique_stocks)
+
 
 def errorhandler(e):
     """Handle error"""
