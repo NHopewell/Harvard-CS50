@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Symbol</th>
+          <th scope="col">Shares</th>
+          <th scope="col">Current Price</th>
+          <th scope="col">TOTAL</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for row in stock_counts %}
+            <tr>
+              <th scope="row">{{ row["stock_symbol"] }}</th>
+              <td>{{ row["SUM(num_shares)"] }}</td>
+              <td>{{ row["Current Price"] }}</td>
+              <td>{{ row["TOTAL"] }}</td>
+            </tr>
+          {% endfor %}
+            <tr>
+              <th scope="row">CASH</th>
+              <td></td>
+              <td></td>
+              <td>{{ cash }}</td>
+            </tr>
+            <tr>
+              <td></th>
+              <td></td>
+              <td></td>
+              <th scope="row">{{ total }}</td>
+            </tr>
+      </tbody>
+    </table>
+{% endblock %}
