@@ -45,21 +45,34 @@ if not os.environ.get("API_KEY"):
 def index():
     """Show portfolio of stocks"""
 
+    rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
+    user_total_cash = rows[0]["cash"]
 
+    stock_counts = db.execute("SELECT user_id, stock_symbol, SUM(num_shares) FROM purchases GROUP BY user_id, stock_symbol HAVING user_id = :id;", id=session["user_id"])
 
+    for row in stock_counts:
+        current_price = lookup(row["stock_symbol"])["price"]
+        total_value = row["SUM(num_shares)"] * current_price
+        row["Current Price"] = current_price
+        row["TOTAL"] = total_value
 
-    # also give user the option to ADD cash.
+    total = sum(row["TOTAL"] for row in stock_counts)
 
-    return apology("TODO")
-
+    return render_template("index.html", stock_counts=stock_counts, cash=usd(user_total_cash), total=usd(total))
 
 @app.route("/history")
 @login_required
 def history():
     """Show history of transactions"""
-    # depending on how tables are set up, might be able to just query the db, can have another table that keeps track of when a user bought or sold stock, what type, how many were sold
-    # the display will be similar to the index, but their history.
-    return apology("TODO")
+
+    rows = db.execute("SELECT * FROM purchases WHERE user_id = :user_id", user_id=session["user_id"])
+    total_spent = db.execute("SELECT SUM(total_cost) FROM purchases GROUP BY user_id HAVING user_id = :id", id=session["user_id"])
+    total_spent = total_spent[0]['SUM(total_cost)']
+    remainder = db.execute("SELECT cash FROM users WHERE id = :user_id", user_id=session["user_id"])
+    remainder = remainder[0]["cash"]
+    all_funds = remainder + total_spent
+
+    return render_template("history.html", rows=rows, cash=usd(remainder), all_funds=usd(all_funds))
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -230,7 +243,6 @@ def sell():
 
     #return apology("TODO")
     #return apology("TODO")
-
 
 def errorhandler(e):
     """Handle error"""
