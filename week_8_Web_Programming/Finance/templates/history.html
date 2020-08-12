@@ -14,7 +14,9 @@
           <th scope="col">Symbol</th>
           <th scope="col">Shares</th>
           <th scope="col">Price</th>
-          <th scope="col">TOTAL</th>
+          <th scope="col">Action</th>
+          <th scope="col">Date</th>
+          <th scope="col">Time</th>
         </tr>
       </thead>
       <tbody>
@@ -23,20 +25,18 @@
               <th scope="row">{{ row["stock_symbol"] }}</th>
               <td>{{ row["num_shares"] }}</td>
               <td>${{ row["stock_value"] }}</td>
-              <td>${{ row["total_cost"] }}</td>
+              <td>{{ row["transaction_type"] }}</td>
+              <td>${{ row["transaction_date"] }}</td>
+              <td>{{ row["transaction_time"] }}</td
             </tr>
           {% endfor %}
             <tr>
               <th scope="row">CASH</th>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
               <td>{{ cash }}</td>
-            </tr>
-            <tr>
-              <td></th>
-              <td></td>
-              <td></td>
-              <th scope="row">{{ all_funds }}</td>
             </tr>
       </tbody>
     </table>
