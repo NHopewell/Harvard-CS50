@@ -6,6 +6,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
 
 from helpers import apology, login_required, lookup, usd
 
@@ -47,7 +48,7 @@ def index():
 
     rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
 
-    stock_counts = db.execute("SELECT user_id, stock_symbol, SUM(num_shares) FROM purchases GROUP BY user_id, stock_symbol HAVING user_id = :id;", id=session["user_id"])
+    stock_counts = db.execute("SELECT user_id, stock_symbol, SUM(num_shares) FROM actions GROUP BY user_id, stock_symbol HAVING user_id = :id;", id=session["user_id"])
 
     for row in stock_counts:
         current_price = lookup(row["stock_symbol"])["price"]
@@ -67,8 +68,8 @@ def index():
 def history():
     """Show history of transactions"""
 
-    rows = db.execute("SELECT * FROM purchases WHERE user_id = :user_id", user_id=session["user_id"])
-    total_spent = db.execute("SELECT SUM(total_cost) FROM purchases GROUP BY user_id HAVING user_id = :id", id=session["user_id"])
+    rows = db.execute("SELECT * FROM actions WHERE user_id = :user_id", user_id=session["user_id"])
+    total_spent = db.execute("SELECT SUM(total_cost) FROM actions GROUP BY user_id HAVING user_id = :id", id=session["user_id"])
     total_spent = total_spent[0]['SUM(total_cost)']
     remainder = db.execute("SELECT cash FROM users WHERE id = :user_id", user_id=session["user_id"])
     remainder = remainder[0]["cash"]
@@ -203,22 +204,27 @@ def buy():
 
         total_cost = stock["price"] * quantity
 
+        date = datetime.today().strftime('%Y-%m-%d')
+        time = datetime.today().strftime('%H:%M:%S')
+
         rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
         user_total_cash = rows[0]["cash"]
+        purchase_type = "BUY"
 
         if user_total_cash < total_cost:
             return apology("You do not have enough funds", 403)
 
-        db.execute("INSERT INTO purchases (user_id, stock_symbol, stock_value, num_shares, total_cost) VALUES (:user, :symbol, :value, :shares, :total);",
-                user=session["user_id"], symbol=symbol, value=stock["price"], shares=quantity, total=total_cost)
+
+        db.execute("INSERT INTO actions (user_id, stock_symbol, stock_value, num_shares, transaction_type, transaction_date, transaction_time) VALUES (:user, :symbol, :value, :shares, :purchase_type, :date, :time);",
+                user=session["user_id"], symbol=symbol, value=stock["price"], shares=quantity, purchase_type=purchase_type, date=date, time=time)
 
         remainder = user_total_cash - total_cost
 
         db.execute("UPDATE users SET cash = :remainder WHERE id = :id", remainder=remainder, id=session["user_id"])
 
-        rows = db.execute("SELECT * FROM purchases WHERE user_id = :user_id", user_id=session["user_id"])
+        rows = db.execute("SELECT * FROM actions WHERE user_id = :user_id", user_id=session["user_id"])
 
-        total_spent = db.execute("SELECT SUM(total_cost) FROM purchases GROUP BY user_id HAVING user_id = :id", id=session["user_id"])
+        total_spent = db.execute("SELECT SUM(total_cost) FROM actions GROUP BY user_id HAVING user_id = :id", id=session["user_id"])
 
         total_spent = total_spent[0]['SUM(total_cost)']
 
@@ -253,7 +259,7 @@ def sell():
 
 
     else:
-        unique_stocks = [item["stock_symbol"] for item in db.execute("SELECT DISTINCT stock_symbol FROM purchases WHERE user_id = :id", id=session["user_id"])]
+        unique_stocks = [item["stock_symbol"] for item in db.execute("SELECT DISTINCT stock_symbol FROM actions WHERE user_id = :id", id=session["user_id"])]
 
         return render_template("sell.html", unique_stocks=unique_stocks)
 
