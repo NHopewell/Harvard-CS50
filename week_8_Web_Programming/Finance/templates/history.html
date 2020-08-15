@@ -6,7 +6,7 @@
 
 {% block main %}
     <div class="container bought-container">
-        <a>Bought!</a>
+        <a>Transaction History</a>
     </div>
     <table class="table table-striped">
       <thead>
@@ -17,6 +17,7 @@
           <th scope="col">Action</th>
           <th scope="col">Date</th>
           <th scope="col">Time</th>
+          <th scope="col">Total</th>
         </tr>
       </thead>
       <tbody>
@@ -27,11 +28,13 @@
               <td>${{ row["stock_value"] }}</td>
               <td>{{ row["transaction_type"] }}</td>
               <td>${{ row["transaction_date"] }}</td>
-              <td>{{ row["transaction_time"] }}</td
+              <td>{{ row["transaction_time"] }}</td>
+              <td>{{ row["total_cost"] }}</td>
             </tr>
           {% endfor %}
             <tr>
               <th scope="row">CASH</th>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
