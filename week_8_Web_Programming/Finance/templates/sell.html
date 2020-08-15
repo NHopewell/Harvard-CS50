@@ -6,21 +6,18 @@
 
 {% block main %}
     <form action="/sell" method="post">
-        <div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span id="selected">Symbol</span>
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-              {% for stock in unique_stocks %}
-                  <button class="dropdown-item" type="button">{{ stock }}</button>
-              {% endfor %}
-          </div>
+        <div class="form-group">
+          <select class="form-control" name="symbol">
+          {% for stock in unique_stocks %}
+              <option>{{ stock }}</option>
+          {% endfor %}
+          </select>
+
         </div>
-        <div class="sell-window">
-            <div class="form-group">
-                <input autocomplete="off" autofocus class="form-control" name="shares" placeholder="Number of shares" type="text">
-            </div>
-            <button class="btn btn-primary" type="submit">Sell</button>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="shares" placeholder="Number of shares" type="text">
         </div>
+        <button class="btn btn-primary" type="submit">Sell</button>
     </form>
 {% endblock %}
+
