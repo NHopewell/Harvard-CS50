@@ -46,22 +46,31 @@ if not os.environ.get("API_KEY"):
 def index():
     """Show portfolio of stocks"""
 
-    rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
+    cash = db.execute("SELECT cash FROM users WHERE id = :id;", id=session["user_id"])
+    cash = cash[0]['cash']
 
-    stock_counts = db.execute("SELECT user_id, stock_symbol, SUM(num_shares) FROM actions GROUP BY user_id, stock_symbol HAVING user_id = :id;", id=session["user_id"])
+    transaction_type = "BUY"
+    bought_stock_counts = db.execute("SELECT stock_symbol, SUM(num_shares) FROM actions GROUP BY user_id, stock_symbol, transaction_type HAVING user_id = :id AND transaction_type = :type;", id=session["user_id"], type=transaction_type)
 
-    for row in stock_counts:
+    transaction_type = "SELL"
+    sold_stock_counts = db.execute("SELECT stock_symbol, SUM(num_shares) FROM actions GROUP BY user_id, stock_symbol, transaction_type HAVING user_id = :id AND transaction_type = :type;", id=session["user_id"], type=transaction_type)
+
+
+
+    """
+
+    for row in bought_stock_counts:
         current_price = lookup(row["stock_symbol"])["price"]
         total_value = row["SUM(num_shares)"] * current_price
         row["Current Price"] = current_price
         row["TOTAL"] = total_value
 
     total_purchased = sum(row["TOTAL"] for row in stock_counts)
-    cash_remaining = rows[0]["cash"]
 
-    user_total_cash = cash_remaining + total_purchased
+    user_total_cash = cash + total_purchased
 
-    return render_template("index.html", stock_counts=stock_counts, cash=usd(cash_remaining), total=usd(user_total_cash))
+    return render_template("index.html", stock_counts=stock_counts, cash=usd(cash), total=usd(user_total_cash))
+    """
 
 @app.route("/history")
 @login_required
@@ -215,8 +224,9 @@ def buy():
             return apology("You do not have enough funds", 403)
 
 
-        db.execute("INSERT INTO actions (user_id, stock_symbol, stock_value, num_shares, transaction_type, transaction_date, transaction_time) VALUES (:user, :symbol, :value, :shares, :purchase_type, :date, :time);",
-                user=session["user_id"], symbol=symbol, value=stock["price"], shares=quantity, purchase_type=purchase_type, date=date, time=time)
+        db.execute("""INSERT INTO actions (user_id, stock_symbol, stock_value, num_shares, transaction_type, transaction_date, transaction_time, total_cost)
+                    VALUES (:user, :symbol, :value, :shares, :purchase_type, :date, :time, :total);""",
+                user=session["user_id"], symbol=symbol, value=stock["price"], shares=quantity, purchase_type=purchase_type, date=date, time=time, total=total_cost)
 
         remainder = user_total_cash - total_cost
 
@@ -224,14 +234,14 @@ def buy():
 
         rows = db.execute("SELECT * FROM actions WHERE user_id = :user_id", user_id=session["user_id"])
 
-        total_spent = db.execute("SELECT SUM(total_cost) FROM actions GROUP BY user_id HAVING user_id = :id", id=session["user_id"])
+        total_spent = db.execute("SELECT SUM(total_cost) FROM actions GROUP BY user_id HAVING user_id = :id AND transaction_type = :type", id=session["user_id"], type=purchase_type)
 
         total_spent = total_spent[0]['SUM(total_cost)']
 
         all_funds = remainder + total_spent
 
 
-        return render_template("history.html", rows=rows, cash=usd(remainder), all_funds=usd(all_funds))
+        return render_template("history.html", rows=rows, cash=usd(remainder))
     else:
         return render_template("buy.html")
 
@@ -245,18 +255,57 @@ def sell():
         # update the users total cash with the share price (lookup()) x num shares
         # update tables of the users stock once they have sold their stock
 
-
         # Ensure symbol was submitted
-        if not request.form.get("symbol"):
+        symbol = request.form.get("symbol")
+        if not symbol:
             return apology("must select a stock to sell", 403)
-        else:
-            print(request.form.get("symbol"))
 
-
-         # Ensure number of shares was submitted
-        if not request.form.get("shares"):
+        # Ensure number of shares was submitted
+        shares = int(request.form.get("shares"))
+        if not shares:
             return apology("must provide the number of shares to sell", 403)
 
+        QRY = "SELECT SUM(num_shares) FROM actions WHERE stock_symbol= :symbol AND user_id = :id"
+
+        rows = db.execute(QRY, symbol=symbol, id=session["user_id"])
+
+        try:
+            user_num_shares_of_stock = int(rows[0]['SUM(num_shares)'])
+        except:
+            return apology("you must input a valid number of shares", 403)
+
+        if shares <= 0:
+            return apology("you must input a valid number of shares", 403)
+        if user_num_shares_of_stock < shares:
+            return apology("you do not have that much stock to sell", 403)
+
+
+        stock = lookup(symbol)
+        if not stock:
+            return apology("Stock symbol entered is not valid", 403)
+
+        total_earned = stock["price"] * shares
+
+        date = datetime.today().strftime('%Y-%m-%d')
+        time = datetime.today().strftime('%H:%M:%S')
+
+        rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
+        user_total_cash = rows[0]["cash"]
+        purchase_type = "SELL"
+
+
+        db.execute("""INSERT INTO actions (user_id, stock_symbol, stock_value, num_shares, transaction_type, transaction_date, transaction_time, total_cost)
+                    VALUES (:user, :symbol, :value, :shares, :purchase_type, :date, :time, :total);""",
+                user=session["user_id"], symbol=symbol, value=stock["price"], shares=shares, purchase_type=purchase_type, date=date, time=time, total=total_earned)
+
+        new_balance = user_total_cash + total_earned
+
+        db.execute("UPDATE users SET cash = :new_balance WHERE id = :id", new_balance=new_balance, id=session["user_id"])
+
+        rows = db.execute("SELECT * FROM actions WHERE user_id = :user_id", user_id=session["user_id"])
+
+
+        return render_template("history.html", rows=rows, cash=usd(new_balance))
 
     else:
         unique_stocks = [item["stock_symbol"] for item in db.execute("SELECT DISTINCT stock_symbol FROM actions WHERE user_id = :id", id=session["user_id"])]
