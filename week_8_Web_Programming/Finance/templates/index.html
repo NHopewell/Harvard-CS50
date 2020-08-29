@@ -15,12 +15,12 @@
         </tr>
       </thead>
       <tbody>
-          {% for row in stock_counts %}
+          {% for row in stocks %}
             <tr>
-              <th scope="row">{{ row["stock_symbol"] }}</th>
-              <td>{{ row["SUM(num_shares)"] }}</td>
-              <td>{{ row["Current Price"] }}</td>
-              <td>{{ row["TOTAL"] }}</td>
+              <th scope="row">{{ row["symbol"] }}</th>
+              <td>{{ row["num_shares"] }}</td>
+              <td>{{ row["current_price"] }}</td>
+              <td>{{ row["total"] }}</td>
             </tr>
           {% endfor %}
             <tr>
@@ -37,4 +37,10 @@
             </tr>
       </tbody>
     </table>
+    <form action="/" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="addCash" placeholder="0.00" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Add Cash</button>
+    </form>
 {% endblock %}
