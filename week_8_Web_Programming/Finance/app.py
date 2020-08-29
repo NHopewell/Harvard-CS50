@@ -41,7 +41,7 @@ if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
     """Show portfolio of stocks"""
@@ -55,22 +55,45 @@ def index():
     transaction_type = "SELL"
     sold_stock_counts = db.execute("SELECT stock_symbol, SUM(num_shares) FROM actions GROUP BY user_id, stock_symbol, transaction_type HAVING user_id = :id AND transaction_type = :type;", id=session["user_id"], type=transaction_type)
 
+    total_stocks = []
 
+    for b_stock in bought_stock_counts:
+        before_len = len(total_stocks)
+        for s_stock in sold_stock_counts:
+            if b_stock['stock_symbol'] == s_stock['stock_symbol']:
+                remainder = b_stock["SUM(num_shares)"] - s_stock['SUM(num_shares)']
+                d = {}
+                d['symbol'] = b_stock['stock_symbol']
+                d['num_shares'] = remainder
+                total_stocks.append(d)
+                break
+        after_len = len(total_stocks)
+        if before_len == after_len:
+            d = {}
+            d['symbol'] = b_stock['stock_symbol']
+            d['num_shares'] = b_stock['SUM(num_shares)']
+            total_stocks.append(d)
 
-    """
+    for stock in total_stocks:
+        current_price = lookup(stock['symbol'])["price"]
+        total = stock['num_shares'] * current_price
+        stock['current_price'] = current_price
+        stock['total'] = total
 
-    for row in bought_stock_counts:
-        current_price = lookup(row["stock_symbol"])["price"]
-        total_value = row["SUM(num_shares)"] * current_price
-        row["Current Price"] = current_price
-        row["TOTAL"] = total_value
+    total_stock_value = sum([stock['total'] for stock in total_stocks])
 
-    total_purchased = sum(row["TOTAL"] for row in stock_counts)
+    if request.method == 'POST':
+        added_cash = float(request.form.get("addCash"))
+        if added_cash < 0:
+            return apology("Must enter a positive number", 403)
+        total_cash = cash + added_cash
 
-    user_total_cash = cash + total_purchased
+        db.execute("UPDATE users SET cash = :new_balance WHERE id = :id", new_balance=total_cash, id=session["user_id"])
 
-    return render_template("index.html", stock_counts=stock_counts, cash=usd(cash), total=usd(user_total_cash))
-    """
+        return render_template("index.html", stocks=total_stocks, cash=usd(total_cash), total=usd(total_cash + total_stock_value))
+    else:
+        return render_template("index.html", stocks=total_stocks, cash=usd(cash), total=usd(cash + total_stock_value))
+
 
 @app.route("/history")
 @login_required
@@ -201,7 +224,11 @@ def buy():
         if not symbol:
             return apology("Must provide a stock symbol", 403)
 
-        quantity = int(request.form.get("shares"))
+        try:
+            quantity = int(request.form.get("shares"))
+        except ValueError:
+            return apology("Must enter a number", 403)
+
         if not quantity:
             return apology("Must provide a quantity to buy", 403)
         elif quantity <= 0:
@@ -261,7 +288,11 @@ def sell():
             return apology("must select a stock to sell", 403)
 
         # Ensure number of shares was submitted
-        shares = int(request.form.get("shares"))
+        try:
+            shares = int(request.form.get("shares"))
+        except ValueError:
+            return apology("Must enter a number", 403)
+
         if not shares:
             return apology("must provide the number of shares to sell", 403)
 
