@@ -2,74 +2,114 @@
 
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <link rel="stylesheet" href="{% static 'blog/main.css' %}">
 
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=PT+Sans:wght@400;700&family=Playfair+Display:wght@400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!--google fonts-->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=PT+Sans:wght@400;700&family=Playfair+Display:wght@400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!--font awesome-->
+    <script src="https://kit.fontawesome.com/ef90c6f2e7.js" crossorigin="anonymous"></script>
 
     {% if title %}
-        <title>Django Fans- {{ title }}</title>
+    <title>Django Fans- {{ title }}</title>
     {% else %}
-        <title>Django Fans</title>
+    <title>Django Fans</title>
     {% endif %}
-  </head>
-  <body>
+</head>
 
-    <header class="site-header">
-        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-          <div class="container head-container">
-            <a class="navbar-brand mr-4" href="/">Django Fans</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarToggle">
-              <div class="navbar-nav">
-                <a class="nav-item nav-link" href="/">Home</a>
-                <a class="nav-item nav-link" href="/about">About</a>
-                <a class="nav-item nav-link" href="#">Login</a>
-                <a class="nav-item nav-link" href="#">Register</a>
-              </div>
-            </div>
-          </div>
-        </nav>
-      </header>
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
 
-      <div class=container></div>
+            <header class="site-header">
+                <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+                    <div class="container head-container">
+                        <a class="navbar-brand mr-4" href="/">Django Fans</a>
+                        <i class="fab fa-python fa-2x"></i>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                            aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-end" id="navbarToggle">
+                            <div class="navbar-nav">
+                                <a class="nav-item nav-link" href="/">Home</a>
+                                <a class="nav-item nav-link" href="/about">About</a>
+                                <a class="nav-item nav-link" href="/about">Django Docs</a>
+                                <a class="nav-item nav-link" href="#">Login</a>
+                                <a class="nav-item nav-link" href="#">Register</a>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </header>
 
-      <main role="main" class="container">
-        <div class="container main-container">
-            <h2>Talk about development, share work, and just chat.</h2>
-            <h3>Topics posted in the blog should be about all things Django.</h3>
+            <main role="main" class="container">
+                <div class="container main-container">
+                    <h2>Talk about development, share work, and just chat.</h2>
+                    <h3>Topics posted should be about all things Django & Python.</h3>
+                </div>
+                <div class="row posts">
+                    <div class="col-md-8">
+                        {% block content %}{% endblock %}
+                    </div>
+                    <div class="col-md-4">
+                        <div class="content-section">
+                            <h3>What's going on</h3>
+                            <p class='content-info'>Keep up-to-date with everything @ Django Fans</p>
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-light">Latest Posts</li>
+                                <li class="list-group-item list-group-item-light">Announcements</li>
+                                <li class="list-group-item list-group-item-light">Calendars</li>
+                                <li class="list-group-item list-group-item-light">etc</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
-        <div class="row posts">
-          <div class="col-md-8">
-            {% block content %}{% endblock %}
-          </div>
-          <div class="col-md-4">
-            <div class="content-section">
-              <h3>Our Sidebar</h3>
-              <p class='text-muted'>You can put any information here you'd like.
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-light">Latest Posts</li>
-                  <li class="list-group-item list-group-item-light">Announcements</li>
-                  <li class="list-group-item list-group-item-light">Calendars</li>
-                  <li class="list-group-item list-group-item-light">etc</li>
-                </ul>
-              </p>
-            </div>
-          </div>
-        </div>
-      </main>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+        <footer id="footer">
+                <div class="container-fluid">Django Fans is maintained by Nick Hopewell</div>
+                <nav class="navbar justify-content-center">
+                    <ul class="nav">
+                      <li class="nav-item">
+                        <a class="footer-nav nav-link" href="https://www.linkedin.com/in/nick-hopewell-a83223132/"
+                          target="blank">LinkedIn <span class="sr-only">(current)</span></a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="footer-nav nav-link" href="https://github.com/NHopewell" target="blank">GitHub</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="footer-nav nav-link"
+                          href="https://github.com/NHopewell/Nick_Hopewell_Resume/blob/master/Nick_Hopewell_Resume.pdf"
+                          target="blank">My Resume</a>
+                      </li>
+                    </ul>
+                  </nav>
+        </footer>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    </div>
+</body>
+
 </html>
