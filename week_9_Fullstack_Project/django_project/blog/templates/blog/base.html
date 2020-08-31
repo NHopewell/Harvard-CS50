@@ -11,9 +11,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <!-- Custom CSS-->
     <link rel="stylesheet" href="{% static 'blog/main.css' %}">
-
     <!--google fonts-->
     <link
         href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=PT+Sans:wght@400;700&family=Playfair+Display:wght@400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800&display=swap"
@@ -48,7 +47,7 @@
                                 <a class="nav-item nav-link" href="/about">About</a>
                                 <a class="nav-item nav-link" href="/about">Django Docs</a>
                                 <a class="nav-item nav-link" href="#">Login</a>
-                                <a class="nav-item nav-link" href="#">Register</a>
+                                <a class="nav-item nav-link register" href="#">Register</a>
                             </div>
                         </div>
                     </div>
@@ -60,7 +59,7 @@
                     <h2>Talk about development, share work, and just chat.</h2>
                     <h3>Topics posted should be about all things Django & Python.</h3>
                 </div>
-                <div class="row posts">
+                <div class="row">
                     <div class="col-md-8">
                         {% block content %}{% endblock %}
                     </div>
