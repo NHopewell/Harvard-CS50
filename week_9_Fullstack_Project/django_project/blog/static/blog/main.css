@@ -57,6 +57,14 @@ ul {
   font-weight: 500;
 }
 
+.site-header .navbar-nav .nav-link:focus {
+    color: #52616b;
+  }
+
+  .site-header .navbar-nav .nav-link:focus:hover {
+    color: #1e2022;
+  }
+
 .main-container {
   margin-top: 130px;
   margin-bottom: 80px;
@@ -229,7 +237,7 @@ a.article-title:hover {
 
 #footer .container-fluid {
   text-align: center;
-  color: ##a3a3a3;
+  color: #a3a3a3;
   padding-top: 14px;
 }
 

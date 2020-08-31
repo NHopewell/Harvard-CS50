@@ -35,7 +35,7 @@
             <header class="site-header">
                 <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
                     <div class="container head-container">
-                        <a class="navbar-brand mr-4" href="/">Django Fans</a>
+                        <a class="navbar-brand mr-4" href="{% url 'blog-home'%}">Django Fans</a>
                         <i class="fab fa-python fa-2x"></i>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
                             aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,9 +43,9 @@
                         </button>
                         <div class="collapse navbar-collapse justify-content-end" id="navbarToggle">
                             <div class="navbar-nav">
-                                <a class="nav-item nav-link" href="/">Home</a>
-                                <a class="nav-item nav-link" href="/about">About</a>
-                                <a class="nav-item nav-link" href="/about">Django Docs</a>
+                                <a class="nav-item nav-link" href="{% url 'blog-home'%}">Home</a>
+                                <a class="nav-item nav-link" href="{% url 'blog-about'%}">About</a>
+                                <a class="nav-item nav-link" href="https://docs.djangoproject.com/en/3.1/" target="blank">Django Docs</a>
                                 <a class="nav-item nav-link" href="#">Login</a>
                                 <a class="nav-item nav-link register" href="#">Register</a>
                             </div>
